@@ -1,4 +1,4 @@
-package com.example.narek.chargingcontrol;
+package com.lifesoft.chc.chargingcontrol;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

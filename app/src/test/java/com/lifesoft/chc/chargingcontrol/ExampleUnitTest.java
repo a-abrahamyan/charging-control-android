@@ -1,4 +1,4 @@
-package com.example.narek.chargingcontrol;
+package com.lifesoft.chc.chargingcontrol;
 
 import org.junit.Test;
 

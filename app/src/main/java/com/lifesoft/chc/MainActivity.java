@@ -1,7 +1,9 @@
-package com.example.narek.chargingcontrol;
+package com.lifesoft.chc;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.lifesoft.chc.chargingcontrol.R;
 
 public class MainActivity extends AppCompatActivity {
 
