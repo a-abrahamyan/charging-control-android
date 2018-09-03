@@ -11,21 +11,24 @@ import com.lifesoft.chc.sms.model.SmsObject;
 
 public class MainActivity extends AppCompatActivity {
     private static String TAG = MainActivity.class.getName();
-    protected SmsModel smsModel;
-
-    public SmsModel getSmsModel() {
-        return SmsObject.INSTANCE().getSmsModel();
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms__receive);
-        Log.i(TAG, "onCreate: successfully");
+        Log.i(TAG, "onCreate:---------> successfully");
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            Log.i(TAG, "onCreate: bundle not null successfully");
+            Log.i(TAG, "onCreate:---------> bundle not null successfully");
             //Todo : need get sms model from singleton class
+            if (getSmsModel() != null) {
+                Log.i(TAG, "onCreate:---------> " + getSmsModel().toString());
+            }
         }
     }
+
+    public SmsModel getSmsModel() {
+        return SmsObject.INSTANCE().getSmsModel();
+    }
+
 }

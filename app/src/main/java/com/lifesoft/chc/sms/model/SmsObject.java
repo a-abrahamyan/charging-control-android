@@ -1,7 +1,7 @@
 package com.lifesoft.chc.sms.model;
 
 public class SmsObject {
-    private static SmsObject INSTANCE=null;
+    private static SmsObject INSTANCE = null;
     private SmsModel smsModel;
 
     public SmsModel getSmsModel() {
@@ -12,9 +12,10 @@ public class SmsObject {
         this.smsModel = smsModel;
     }
 
-    private SmsObject() { }
+    private SmsObject() {
+    }
 
-    public static SmsObject INSTANCE(){
-        return INSTANCE==null?INSTANCE=new SmsObject():INSTANCE;
+    public static SmsObject INSTANCE() {
+        return INSTANCE == null ? INSTANCE = new SmsObject() : INSTANCE;
     }
 }
