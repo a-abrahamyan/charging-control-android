@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lifesoft.chc.activity.MainActivity">
+    tools:context="com.lifesoft.chc.view.activity.MainActivity">
 
 <!--Todo : MainActivity.xml-->
     <TextView

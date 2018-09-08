@@ -1,4 +1,4 @@
-package com.lifesoft.chc.sms.model;
+package com.lifesoft.chc.view.sms.model;
 
 public class SmsModel {
     private String messageType;

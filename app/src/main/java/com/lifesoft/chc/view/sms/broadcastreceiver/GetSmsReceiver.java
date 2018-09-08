@@ -1,4 +1,4 @@
-package com.lifesoft.chc.sms.broadcastreceiver;
+package com.lifesoft.chc.view.sms.broadcastreceiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,10 +7,11 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.lifesoft.chc.AppConstants;
-import com.lifesoft.chc.activity.MainActivity;
-import com.lifesoft.chc.sms.model.SmsModel;
-import com.lifesoft.chc.sms.model.SmsObject;
+import com.lifesoft.chc.constants.AppConstants;
+import com.lifesoft.chc.constants.CardType;
+import com.lifesoft.chc.view.activity.MainActivity;
+import com.lifesoft.chc.view.sms.model.SmsModel;
+import com.lifesoft.chc.view.sms.model.SmsObject;
 
 import java.util.Date;
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class GetSmsReceiver extends BroadcastReceiver {
         smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         smsIntent.putExtra(AppConstants.MESSAGE_FROM, smsMessage.getOriginatingAddress());
         smsIntent.putExtra(AppConstants.MESSAGE_BODY, smsMessage.getMessageBody());
-        if (smsMessage.getDisplayOriginatingAddress().equals(AppConstants.BANK_CARD_TYPE[0]) || smsMessage.getDisplayOriginatingAddress().equals(AppConstants.BANK_CARD_TYPE[1])) {
+        if (smsMessage.getDisplayOriginatingAddress().equals(CardType.CREDIT) || smsMessage.getDisplayOriginatingAddress().equals(CardType.ACCOUNT)) {
             Date date = new Date(smsMessage.getTimestampMillis());
             SmsModel smsModel = new SmsModel(smsMessage.getDisplayOriginatingAddress(), smsMessage.getMessageBody(), date);
             smsObject.setSmsModel(smsModel);
