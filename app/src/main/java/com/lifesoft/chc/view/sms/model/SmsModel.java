@@ -1,34 +1,16 @@
 package com.lifesoft.chc.view.sms.model;
 
-public class SmsModel {
-    private String messageType;
-    private String messageBody;
-    private Object data;
+import java.io.Serializable;
+import java.util.List;
 
-    public SmsModel(String messageType, String messageBody, Object data) {
-        this.messageType = messageType;
-        this.messageBody = messageBody;
-        this.data = data;
+public class SmsModel implements Serializable {
+    private List<Transaction> transactions = null;
+
+    public List<Transaction> getTransactions() {
+        return transactions;
     }
 
-    public String getMessageType() {
-        return messageType;
-    }
-
-    public String getMessageBody() {
-        return messageBody;
-    }
-
-    public Object getData() {
-        return data;
-    }
-
-    @Override
-    public String toString() {
-        return "SmsModel{" +
-                "messageType='" + messageType + '\'' +
-                ", messageBody='" + messageBody + '\'' +
-                ", data=" + data +
-                '}';
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }

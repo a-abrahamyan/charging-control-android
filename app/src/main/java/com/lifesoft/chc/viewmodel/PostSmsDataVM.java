@@ -1,44 +1,29 @@
 package com.lifesoft.chc.viewmodel;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.lifesoft.chc.api.ApiService;
-import com.lifesoft.chc.api.ApiUtils;
-import com.lifesoft.chc.model.CCPostRequest;
+import com.lifesoft.chc.AppApplication;
+import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.view.sms.model.SmsModel;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.io.IOException;
 
-public class PostSmsDataVM extends AndroidViewModel {
+import okhttp3.OkHttpClient;
+
+public class PostSmsDataVM {
     private static String TAG = PostSmsDataVM.class.getName();
-    private MutableLiveData<CCPostRequest> mutableLiveData = new MutableLiveData<>();
-    private ApiService apiService;
-    private SmsModel smsModel;
-
-    public void setSmsModel(SmsModel smsModel) {
-        this.smsModel = smsModel;
-        postRequset();
-    }
-
-    public PostSmsDataVM(@NonNull Application application) {
-        super(application);
-    }
-    private void postRequset(){
-        apiService = ApiUtils.getAPIService();
-        apiService.postData("AAA","AAA","AAA","AAA").enqueue(new Callback<CCPostRequest>() {
+    public void postRequset(SmsModel smsModel){
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(AppApplication.configurationObject(AppConstants.POST_BASE_URL, smsModel)).enqueue(new okhttp3.Callback() {
             @Override
-            public void onResponse(Call<CCPostRequest> call, Response<CCPostRequest> response) {
-
+            public void onFailure(okhttp3.Call call, IOException e) {
+                Log.i(TAG, "onFailure: " + e.getMessage());
             }
-
             @Override
-            public void onFailure(Call<CCPostRequest> call, Throwable t) {
-
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                if (response.body() != null) {
+                    Log.i(TAG, "onResponse: ");
+                }
             }
         });
     }

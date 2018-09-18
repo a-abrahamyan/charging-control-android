@@ -12,8 +12,10 @@ import com.lifesoft.chc.constants.CardType;
 import com.lifesoft.chc.view.activity.MainActivity;
 import com.lifesoft.chc.view.sms.model.SmsModel;
 import com.lifesoft.chc.view.sms.model.SmsObject;
+import com.lifesoft.chc.view.sms.model.Transaction;
 
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class GetSmsReceiver extends BroadcastReceiver {
@@ -38,12 +40,18 @@ public class GetSmsReceiver extends BroadcastReceiver {
     private void goToActivity(Context context, SmsMessage smsMessage) {
         Intent smsIntent = new Intent(context, MainActivity.class);
         smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        smsIntent.putExtra(AppConstants.MESSAGE_FROM, smsMessage.getOriginatingAddress());
-        smsIntent.putExtra(AppConstants.MESSAGE_BODY, smsMessage.getMessageBody());
-        if (smsMessage.getDisplayOriginatingAddress().equals(CardType.CREDIT) || smsMessage.getDisplayOriginatingAddress().equals(CardType.ACCOUNT)) {
-            Date date = new Date(smsMessage.getTimestampMillis());
-            SmsModel smsModel = new SmsModel(smsMessage.getDisplayOriginatingAddress(), smsMessage.getMessageBody(), date);
+        if (smsMessage.getDisplayOriginatingAddress().equals("NOY") || smsMessage.getDisplayOriginatingAddress().equals(CardType.ACCOUNT)) {
+            //create post data
+            String type = smsMessage.getDisplayMessageBody().equals(CardType.CREDIT.getValue())?CardType.CREDIT.getValue():CardType.ACCOUNT.getValue();
+            String messageBody = smsMessage.getMessageBody();
+            String date = String.valueOf(smsMessage.getTimestampMillis());
+            String id = date;
+            SmsModel smsModel = new SmsModel();
+            List<Transaction> transaction = new ArrayList<>();
+            transaction.add(new Transaction(type, messageBody, date, id));
+            smsModel.setTransactions(transaction);
             smsObject.setSmsModel(smsModel);
+            smsIntent.putExtra(AppConstants.SMS_OBJECT, smsModel);
             context.startActivity(smsIntent);
             Log.i(TAG, "onReceive:---------> go to MainActivity");
         } else {
