@@ -8,6 +8,7 @@ public interface AppConstants {
     String MESSAGE_FROM = "message_from";
     String MESSAGE_BODY = "message_body";
     String PDU_BUNDLE_KEY = "pdus";
+    int SMS_REQUEST_CODE = 1001;
 
 }
 

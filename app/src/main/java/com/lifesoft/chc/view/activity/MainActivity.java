@@ -22,6 +22,7 @@ import android.view.View;
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.model.CCTransactions;
+import com.lifesoft.chc.utils.Permissions;
 import com.lifesoft.chc.view.fragment.AllSmsFragment;
 import com.lifesoft.chc.view.sms.model.SmsModel;
 import com.lifesoft.chc.view.sms.model.SmsObject;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity
     private CreatedTransactionVM createdTransactionVM;
     private PostSmsDataVM smsDataVM;
     private SmsObject smsObject;
+    private Permissions permissions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 //----------------------------------------------------------------------------------------------//
+        permissions = new Permissions(MainActivity.this);
+        permissions.connectSMSPermissions();
         smsObject = SmsObject.INSTANCE();
         createViewModels();
         Bundle extras = getIntent().getExtras();
