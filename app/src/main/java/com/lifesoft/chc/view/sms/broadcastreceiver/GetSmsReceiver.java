@@ -45,7 +45,7 @@ public class GetSmsReceiver extends BroadcastReceiver {
             String type = smsMessage.getDisplayMessageBody().equals(CardType.CREDIT.getValue())?CardType.CREDIT.getValue():CardType.ACCOUNT.getValue();
             String messageBody = smsMessage.getMessageBody();
             String date = String.valueOf(smsMessage.getTimestampMillis());
-            String id = date;
+            String id = String.valueOf(smsMessage.getTimestampMillis());
             SmsModel smsModel = new SmsModel();
             List<Transaction> transaction = new ArrayList<>();
             transaction.add(new Transaction(type, messageBody, date, id));

@@ -1,7 +1,5 @@
 package com.lifesoft.chc.model
 
-import android.arch.persistence.room.Transaction
-
 
 data class CCTransactions(
         val count: String,

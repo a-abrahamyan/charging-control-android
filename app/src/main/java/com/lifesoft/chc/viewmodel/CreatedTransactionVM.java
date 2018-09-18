@@ -23,11 +23,6 @@ import static android.support.constraint.Constraints.TAG;
 public class CreatedTransactionVM extends AndroidViewModel {
 
     private MutableLiveData<CCTransactions> modelTrasactionsMutableLiveData = new MutableLiveData<>();
-    private String dataDetails;
-
-    public void setDataDetails(String data) {
-        this.dataDetails = data;
-    }
 
     public CreatedTransactionVM(@NonNull Application application) {
         super(application);
