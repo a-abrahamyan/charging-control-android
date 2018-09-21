@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.constants.CardType;
@@ -53,6 +54,7 @@ public class GetSmsReceiver extends BroadcastReceiver {
             smsObject.setSmsModel(smsModel);
             smsIntent.putExtra(AppConstants.SMS_OBJECT, smsModel);
             context.startActivity(smsIntent);
+            Toast.makeText(context, "EKAV", Toast.LENGTH_SHORT).show();
             Log.i(TAG, "onReceive:---------> go to MainActivity");
         } else {
             Log.i(TAG, "goToActivity: Card type is false");

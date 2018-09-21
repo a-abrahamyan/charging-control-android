@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 
 //----------------------------------------------------------------------------------------------//
         permissions = new Permissions(MainActivity.this);
-        permissions.connectSMSPermissions();
+      //  permissions.connectSMSPermissions();
         smsObject = SmsObject.INSTANCE();
         createViewModels();
         Bundle extras = getIntent().getExtras();

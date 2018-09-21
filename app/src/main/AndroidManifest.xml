@@ -18,17 +18,22 @@
             android:name="com.lifesoft.chc.view.activity.MainActivity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
+        <receiver android:name="com.lifesoft.chc.view.sms.broadcastreceiver.GetSmsReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name="com.lifesoft.chc.view.activity.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name="com.lifesoft.chc.view.sms.broadcastreceiver.GetSmsReceiver">
-            <intent-filter>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
-            </intent-filter>
-        </receiver>
     </application>
+
 </manifest>
