@@ -3,10 +3,8 @@ package com.lifesoft.chc.view.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -40,7 +38,6 @@ public class MainActivity extends AppCompatActivity
     private SmsObject smsObject;
     private Permissions permissions;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,10 +64,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 //----------------------------------------------------------------------------------------------//
-        NetworkUtils networkUtils = new NetworkUtils(this);
-        networkUtils.isInternetConnection();
+        NetworkUtils.isConnected(this);
         permissions = new Permissions(MainActivity.this);
-      //  permissions.connectSMSPermissions();
+        permissions.connectSMSPermissions();
         smsObject = SmsObject.INSTANCE();
         createViewModels();
         Bundle extras = getIntent().getExtras();
