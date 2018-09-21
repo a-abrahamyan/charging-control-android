@@ -43,7 +43,6 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView date;
-        TextView hour;
         TextView money;
         TextView type;
         TextView before;
@@ -51,7 +50,6 @@ public class GeneralRecyclerViewAdapter extends RecyclerView.Adapter<GeneralRecy
         public MyViewHolder(View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.dateID);
-            hour = itemView.findViewById(R.id.hourID);
             money = itemView.findViewById(R.id.moneyID);
             type = itemView.findViewById(R.id.typeID);
             before = itemView.findViewById(R.id.beforeID);
