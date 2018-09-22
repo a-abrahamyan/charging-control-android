@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient;
 
 public class PostSmsDataVM {
     private static String TAG = PostSmsDataVM.class.getName();
-    public void postRequset(SmsModel smsModel){
+    public void postRequest(SmsModel smsModel){
         OkHttpClient client = new OkHttpClient();
         client.newCall(AppApplication.configurationObject(AppConstants.POST_BASE_URL, smsModel)).enqueue(new okhttp3.Callback() {
             @Override
@@ -27,5 +27,4 @@ public class PostSmsDataVM {
             }
         });
     }
-
 }

@@ -18,10 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
+import com.lifesoft.chc.database.engine.DBEngine;
 import com.lifesoft.chc.model.CCTransactions;
 import com.lifesoft.chc.utils.NetworkUtils;
 import com.lifesoft.chc.utils.Permissions;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private CreatedTransactionVM createdTransactionVM;
     private PostSmsDataVM smsDataVM;
     private SmsObject smsObject;
+    private DBEngine engine;
     private Permissions permissions;
     private FragmentTransaction fragmentTransaction;
     // Views
@@ -53,13 +54,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         initViews();
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        toolbar.setTitle(AppConstants.APP_NAME);
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -86,20 +83,26 @@ public class MainActivity extends AppCompatActivity {
         permissions = new Permissions(MainActivity.this);
         permissions.connectSMSPermissions();
         smsObject = SmsObject.INSTANCE();
+        engine = DBEngine.INSTANCE();
         createViewModels();
         Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            SmsModel smsModel = (SmsModel) extras.getSerializable(AppConstants.SMS_OBJECT);
-            if (smsModel != null) {
-                synchronized (this) {
-                    postSmsData(smsModel);
+        listenSmsBroadcastReceiver(extras);
+        getNetworkData();
+    }
+
+    private synchronized void listenSmsBroadcastReceiver(Bundle bundle) {
+        if (bundle != null && getSmsModel() != null) {
+            String isNetworkAvailable = (String) bundle.get(AppConstants.IS_NETWORK_AVAILABLE);
+            if (isNetworkAvailable != null) {
+                if (isNetworkAvailable.equals("true")) {
+                    // request sms model in server
+                    postSmsData(getSmsModel());
+                } else if (isNetworkAvailable.equals("false")) {
+                    //save sms model in database
+                    engine.getServices(this).save(getSmsModel());
                 }
             }
-            if (getSmsModel() != null) {
-                Log.i(TAG, "onCreate:---------> " + getSmsModel().toString());
-            }
         }
-        getNetworkData();
     }
 
     private void initViews() {
@@ -138,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void postSmsData(SmsModel smsModel) {
-        smsDataVM.postRequset(smsModel);
+        smsDataVM.postRequest(smsModel);
     }
 
     public SmsModel getSmsModel() {
