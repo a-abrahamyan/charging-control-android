@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Charging Control</string>
+    <string name="app_name">CC</string>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,4 +14,15 @@
     <string name="type">type : </string>
     <string name="before">before : </string>
     <string name="after">after : </string>
+
+    <!-- Filter options -->
+    <string name="filter_success">Success</string>
+    <string name="filter_amount">Amount</string>
+    <string name="filter_date">Date</string>
+    <string name="filter_date_sorts">Date Sort</string>
+
+    <!-- Other -->
+    <string name="cancel">Cancel</string>
+    <string name="apply">Apply</string>
+
 </resources>

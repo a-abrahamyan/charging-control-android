@@ -1,6 +1,5 @@
 package com.lifesoft.chc.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
@@ -9,14 +8,7 @@ import android.view.animation.AnimationUtils;
 
 public class CCAnimation {
     private static String TAG = CCAnimation.class.getName();
-    private Activity activity;
-    private Context context;
-
-    public CCAnimation(Context context) {
-        this.context = context;
-        activity = (Activity) context;
-    }
-    public void splashAnimation(Context context, View view,int animPath){
+    public static void dialogShowAnimation(Context context, View view,int animPath){
         Animation splashAnimation = AnimationUtils.loadAnimation(context, animPath);
         splashAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override

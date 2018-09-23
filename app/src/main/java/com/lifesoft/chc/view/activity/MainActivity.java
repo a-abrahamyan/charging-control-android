@@ -1,6 +1,7 @@
 package com.lifesoft.chc.view.activity;
 
 
+import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Build;
@@ -16,14 +17,19 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.database.engine.DBEngine;
 import com.lifesoft.chc.model.CCTransactions;
+import com.lifesoft.chc.utils.CCAnimation;
 import com.lifesoft.chc.utils.NetworkUtils;
 import com.lifesoft.chc.utils.Permissions;
 import com.lifesoft.chc.view.fragment.AllSmsFragment;
@@ -45,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private FloatingActionButton fab;
+    private ImageView fab;
     private ActionBarDrawerToggle toggle;
     private Window window;
+    private TextView dialogCancel;
+    private TextView dialogApply;
     // Variables
 
 
@@ -65,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
         // change toolbar color and title
         toolbarConfiguration(toolbar);
 
-        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        fab.setOnClickListener(view -> showCCFilterDialog());
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -95,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         listenSmsBroadcastReceiver(extras);
         getNetworkData();
+        //     createFragment(R.id.mainContainer, new AllSmsFragment());
     }
 
     private synchronized void listenSmsBroadcastReceiver(Bundle bundle) {
@@ -114,9 +122,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void initViews() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (ImageView) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+    }
+
+    private void initDialogViews(View view) {
+        dialogCancel = view.findViewById(R.id.cancel_dialogID);
+        dialogApply = view.findViewById(R.id.apply_dialogID);
     }
 
     @Override
@@ -167,20 +180,40 @@ public class MainActivity extends AppCompatActivity {
                 if (appResponse != null) {
                     Log.i(TAG, "onChanged: Successfully");
                     smsObject.setCcTransactions(appResponse);
+                    createFragment(R.id.mainContainer, new AllSmsFragment());
                 } else {
                     Log.i(TAG, "onChanged: Successfully");
                 }
             }
         });
     }
-    private void toolbarConfiguration(Toolbar toolbar){
+
+    private void toolbarConfiguration(Toolbar toolbar) {
         toolbar.setTitle(AppConstants.APP_NAME);
         toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
     }
-    private void windowConfiguration(Window window){
+
+    private void windowConfiguration(Window window) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(getResources().getColor(R.color.window));
             window.setNavigationBarColor(getResources().getColor(R.color.action_bar));
         }
+    }
+
+    private void showCCFilterDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.alert_dialog_filter, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+        //init views
+        initDialogViews(dialogView);
+        //dialog animation
+        CCAnimation.dialogShowAnimation(this, dialogView, R.anim.alert_dialog_filter);
+        //show dialog
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+        //tap dialog view
+        dialogCancel.setOnClickListener(v -> alertDialog.dismiss());
     }
 }

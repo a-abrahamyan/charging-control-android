@@ -9,4 +9,5 @@
     <color name="action_bar">#263238</color>
     <color name="window">#1b2428</color>
     <color name="splash_background">#5d9eba</color>
+    <color name="cc">#FFE48C5D</color>
 </resources>
