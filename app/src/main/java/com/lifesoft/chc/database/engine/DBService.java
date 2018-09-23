@@ -4,16 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import com.lifesoft.chc.view.sms.model.SmsModel;
 import com.lifesoft.chc.view.sms.model.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static com.lifesoft.chc.database.engine.DBConstants.DB_NAME;
 import static com.lifesoft.chc.database.engine.DBConstants.DB_TABLE;

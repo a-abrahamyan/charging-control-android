@@ -3,8 +3,8 @@ package com.lifesoft.chc.view.activity;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
@@ -46,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FloatingActionButton fab;
     private ActionBarDrawerToggle toggle;
+    private Window window;
     // Variables
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         initViews();
-        toolbar.setTitle(AppConstants.APP_NAME);
+
+        //change window and navigation bar color
+        window = getWindow();
+        windowConfiguration(window);
+
+        // change toolbar color and title
+        toolbarConfiguration(toolbar);
+
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
 
@@ -64,18 +74,15 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         // click drawer item
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.sms_info:
-                        createFragment(R.id.mainContainer, new AllSmsFragment());
-                        navigationView.setSelected(true);
-                        drawer.closeDrawers();
-                        break;
-                }
-                return false;
+        navigationView.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.sms_info:
+                    createFragment(R.id.mainContainer, new AllSmsFragment());
+                    navigationView.setSelected(true);
+                    drawer.closeDrawers();
+                    break;
             }
+            return false;
         });
 
         //TODO: need optimization
@@ -165,5 +172,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void toolbarConfiguration(Toolbar toolbar){
+        toolbar.setTitle(AppConstants.APP_NAME);
+        toolbar.setBackgroundColor(getResources().getColor(R.color.action_bar));
+    }
+    private void windowConfiguration(Window window){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setStatusBarColor(getResources().getColor(R.color.window));
+            window.setNavigationBarColor(getResources().getColor(R.color.action_bar));
+        }
     }
 }

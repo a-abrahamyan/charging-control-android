@@ -15,7 +15,7 @@ public class SplashScreenActivity extends AwesomeSplash {
     public void initSplash(ConfigSplash configSplash) {
         getSupportActionBar().hide();
         //Customize Circular
-        configSplash.setBackgroundColor(R.color.key_color); //any color you want form colors.xml
+        configSplash.setBackgroundColor(R.color.splash_background); //any color you want form colors.xml
         configSplash.setAnimCircularRevealDuration(2000); //int ms
         configSplash.setRevealFlagX(Flags.REVEAL_RIGHT);  //or Flags.REVEAL_LEFT
         configSplash.setRevealFlagY(Flags.REVEAL_BOTTOM); //or Flags.REVEAL_TOP
