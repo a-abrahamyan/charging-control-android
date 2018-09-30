@@ -1,17 +1,21 @@
 package com.lifesoft.chc.view.sms.broadcastreceiver;
 
+import android.app.Notification;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
+import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.constants.CardType;
 import com.lifesoft.chc.database.engine.DBEngine;
 import com.lifesoft.chc.utils.NetworkUtils;
+import com.lifesoft.chc.utils.NotificationHelper;
 import com.lifesoft.chc.view.activity.MainActivity;
 import com.lifesoft.chc.view.sms.model.SmsModel;
 import com.lifesoft.chc.view.sms.model.SmsObject;
@@ -27,7 +31,9 @@ public class GetSmsReceiver extends BroadcastReceiver {
     private SmsMessage smsMessage;
     private SmsObject smsObject;
     private DBEngine engine;
+    private NotificationHelper noti;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i(TAG, "onReceive:---------> opened");
@@ -38,10 +44,13 @@ public class GetSmsReceiver extends BroadcastReceiver {
         byte[] encodePduObject = (byte[]) Objects.requireNonNull(pduObject)[0];
         smsMessage = SmsMessage.createFromPdu(encodePduObject);
         if (smsMessage != null) {
+            //init notification
+            noti = new NotificationHelper(context);
+            sendNotification(AppConstants.NOTIFICATION_PRIMARY, AppConstants.NOTIFICATION_TITLE);
+            // TODO: need send data to server
             createSmsModel(context, smsMessage);
         }
     }
-
     private void createSmsModel(Context context, SmsMessage smsMessage) {
         Intent smsIntent = new Intent(context, MainActivity.class);
         smsIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -62,9 +71,21 @@ public class GetSmsReceiver extends BroadcastReceiver {
             } else {
                 smsIntent.putExtra(AppConstants.IS_NETWORK_AVAILABLE, "false");
             }
-            context.startActivity(smsIntent);
+     //       context.startActivity(smsIntent);
         } else {
             Log.i(TAG, "goToActivity: Card type is false");
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void sendNotification(int id, String title) {
+        Notification.Builder nb = null;
+        switch (id) {
+            case AppConstants.NOTIFICATION_PRIMARY:
+                nb = noti.getNotification1(title,AppConstants.NOTIFICATION_CONTENT);
+                break;
+        }
+        if (nb != null) {
+            noti.notify(id, nb);
         }
     }
 

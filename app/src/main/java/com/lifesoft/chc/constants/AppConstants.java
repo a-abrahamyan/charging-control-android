@@ -10,6 +10,9 @@ public interface AppConstants {
     String MESSAGE_BODY = "message_body";
     String PDU_BUNDLE_KEY = "pdus";
     int SMS_REQUEST_CODE = 1001;
+    int NOTIFICATION_PRIMARY = 1100;
+    String NOTIFICATION_TITLE = "Charging Control";
+    String NOTIFICATION_CONTENT = "You have a transaction !!!";
 
 }
 

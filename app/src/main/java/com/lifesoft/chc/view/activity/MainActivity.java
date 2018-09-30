@@ -2,8 +2,13 @@ package com.lifesoft.chc.view.activity;
 
 
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +17,8 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +29,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.QuickContactBadge;
 import android.widget.TextView;
 
 import com.lifesoft.chc.chargingcontrol.R;
@@ -58,14 +67,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView dialogApply;
     // Variables
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setSupportActionBar(toolbar);
         initViews();
-
         //change window and navigation bar color
         window = getWindow();
         windowConfiguration(window);
@@ -102,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         listenSmsBroadcastReceiver(extras);
         getNetworkData();
-        //     createFragment(R.id.mainContainer, new AllSmsFragment());
     }
 
     private synchronized void listenSmsBroadcastReceiver(Bundle bundle) {
@@ -174,16 +180,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getNetworkData() {
-        createdTransactionVM.getModelTrasactionsMutableLiveData().observe(MainActivity.this, new Observer<CCTransactions>() {
-            @Override
-            public void onChanged(@Nullable CCTransactions appResponse) {
-                if (appResponse != null) {
-                    Log.i(TAG, "onChanged: Successfully");
-                    smsObject.setCcTransactions(appResponse);
-                    createFragment(R.id.mainContainer, new AllSmsFragment());
-                } else {
-                    Log.i(TAG, "onChanged: Successfully");
-                }
+        createdTransactionVM.getModelTrasactionsMutableLiveData().observe(MainActivity.this, appResponse -> {
+            if (appResponse != null) {
+                Log.i(TAG, "onChanged: Successfully");
+                smsObject.setCcTransactions(appResponse);
+                //     createFragment(R.id.mainContainer, new AllSmsFragment());
+            } else {
+                Log.i(TAG, "onChanged: Successfully");
             }
         });
     }

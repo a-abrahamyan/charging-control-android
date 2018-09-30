@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.lifesoft.chc.view.activity.MainActivity">
-
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +20,6 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-
     <ImageView
         android:id="@+id/fab"
         android:src="@drawable/app_icon_cc"
