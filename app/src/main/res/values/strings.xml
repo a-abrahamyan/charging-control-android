@@ -53,12 +53,17 @@
     <string name="primary2_body">Second Notification for Primary Channel</string>
     <string name="secondary2_body">Second Notification for Secondary Channel</string>
 
-    <!-- Spinner Adapter -->
+    <!-- Spinner Adapter Success -->
     <string-array name="planets_array">
         <item>None</item>
         <item>True</item>
         <item>False</item>
     </string-array>
-
+    <!-- Spinner Adapter Date -->
+    <string-array name="planets_array_date">
+        <item>None</item>
+        <item>Asc</item>
+        <item>Desc</item>
+    </string-array>
 
 </resources>

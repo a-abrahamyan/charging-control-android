@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -61,9 +62,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextView dialogCancel;
     private TextView dialogApply;
     private Spinner spinnerSuccess;
+    private Spinner spinnerDate;
     private ProgressBar progressBar;
+    private ImageView spinnerSuccessEdit;
+    private ImageView spinnerDateEdit;
     // Variables
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +139,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dialogCancel = view.findViewById(R.id.cancel_dialogID);
         dialogApply = view.findViewById(R.id.apply_dialogID);
         spinnerSuccess = (Spinner) view.findViewById(R.id.planets_spinner);
+        spinnerDate = (Spinner) view.findViewById(R.id.planets_spinner_date);
+        spinnerDateEdit = view.findViewById(R.id.spinner_date_edit);
+        spinnerSuccessEdit = view.findViewById(R.id.spinner_success_edit);
     }
 
     @Override
@@ -201,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initCCFilterDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -211,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         initDialogViews(dialogView);
         //spinner on click
         spinnerSuccess.setOnItemSelectedListener(this);
+        spinnerDate.setOnItemSelectedListener(this);
         //init spinner adapter
         initSpinnerAdapter();
         //dialog animation
@@ -218,29 +228,44 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //show dialog
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+        spinnerSuccessEdit.setVisibility(View.VISIBLE);
+        spinnerDateEdit.setVisibility(View.VISIBLE);
         //tap dialog view
+        spinnerSuccessEdit.setOnClickListener(v -> {
+            spinnerSuccess.setVisibility(View.VISIBLE);
+            spinnerDate.setVisibility(View.GONE);
+        });
+        spinnerDateEdit.setOnClickListener(v -> {
+            spinnerDate.setVisibility(View.VISIBLE);
+            spinnerSuccess.setVisibility(View.GONE);
+        });
         dialogCancel.setOnClickListener(v -> alertDialog.dismiss());
         dialogApply.setOnClickListener(v -> {
+            //TODO: need do logic in method
             alertDialog.dismiss();
             ccFilter = new CCFilter(this);
             progressBar.setVisibility(View.VISIBLE);
-            CCTransactions transaction = ccFilter.sortSuccess(smsObject.getCcTransactions(),spinnerSuccess.getSelectedItem().toString() );
-            if (transaction != null) {
-                progressBar.setVisibility(View.INVISIBLE);
-                Fragment fragment = new AllSmsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(FilterTypes.SUCCESS_BUNDLE_KEY.getValue(), transaction);
-                fragment.setArguments(bundle);
-                createFragment(R.id.mainContainer, fragment);
+            String type = "";
+            if (spinnerSuccess.getVisibility() == View.VISIBLE) {
+                type = FilterTypes.SUCCESS.getValue();
+            } else if (spinnerDate.getVisibility() == View.VISIBLE) {
+                type = FilterTypes.DATE.getValue();
             }
+            applyDialog(type);
         });
     }
 
     private void initSpinnerAdapter() {
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        // Success
+        ArrayAdapter<CharSequence> adapterSuccess = ArrayAdapter.createFromResource(this,
                 R.array.planets_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSuccess.setAdapter(adapter);
+        adapterSuccess.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSuccess.setAdapter(adapterSuccess);
+        // Date
+        ArrayAdapter<CharSequence> adapterDate = ArrayAdapter.createFromResource(this,
+                R.array.planets_array_date, android.R.layout.simple_spinner_item);
+        adapterDate.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDate.setAdapter(adapterDate);
     }
 
     @Override
@@ -254,5 +279,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void applyDialog(String type) {
+      if (type.equals(FilterTypes.SUCCESS.getValue())){
+          CCTransactions transaction = ccFilter.sortSuccess(smsObject.getCcTransactions(), spinnerSuccess.getSelectedItem().toString());
+          if (transaction != null) {
+              Fragment fragment = new AllSmsFragment();
+              Bundle bundle = new Bundle();
+              bundle.putSerializable(FilterTypes.SUCCESS_BUNDLE_KEY.getValue(), transaction);
+              fragment.setArguments(bundle);
+              progressBar.setVisibility(View.INVISIBLE);
+              createFragment(R.id.mainContainer, fragment);
+          }
+      }else if (type.equals(FilterTypes.DATE.getValue())){
+          CCTransactions transaction = ccFilter.sortDate(smsObject.getCcTransactions(), spinnerDate.getSelectedItem().toString());
+          if (transaction != null) {
+              Fragment fragment = new AllSmsFragment();
+              Bundle bundle = new Bundle();
+              bundle.putSerializable(FilterTypes.DATE_BUNDLE_KEY.getValue(), transaction);
+              fragment.setArguments(bundle);
+              progressBar.setVisibility(View.INVISIBLE);
+              createFragment(R.id.mainContainer, fragment);
+          }
+      }
     }
 }

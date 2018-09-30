@@ -27,7 +27,7 @@ public class CCTransactions implements Serializable {
     public void setTransactions(List<CCTransactions.Transaction> transactions) {
         this.transactions = transactions;
     }
-  public   class Transaction {
+  public   class Transaction implements Serializable {
         private String date;
         private String type;
         private String amount;

@@ -41,10 +41,16 @@ public class AllSmsFragment extends Fragment {
         initAdapter();
         Bundle bundle = getArguments();
         if (bundle != null) {
-            CCTransactions ccTransactions = (CCTransactions) getArguments().get(FilterTypes.SUCCESS_BUNDLE_KEY.getValue());
-            if (ccTransactions != null) {
-                initAdapter(ccTransactions);
+            CCTransactions ccTransactionsSuccess = (CCTransactions) getArguments().get(FilterTypes.SUCCESS_BUNDLE_KEY.getValue());
+            CCTransactions ccTransactionsDate = (CCTransactions) getArguments().get(FilterTypes.DATE_BUNDLE_KEY.getValue());
+            if (ccTransactionsSuccess != null) {
+                initAdapter(ccTransactionsSuccess);
             }
+            if (ccTransactionsDate !=null){
+                initAdapter(ccTransactionsDate);
+            }
+        }else {
+            initAdapter();
         }
         return view;
     }
