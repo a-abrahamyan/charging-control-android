@@ -6,6 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface SuccessListener {
-    CCTransactions sortSuccess(CCTransactions transation, boolean isTrue);
+    CCTransactions sortSuccess(CCTransactions transation, String successType);
 
 }

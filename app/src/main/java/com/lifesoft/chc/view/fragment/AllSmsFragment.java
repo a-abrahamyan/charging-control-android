@@ -1,6 +1,7 @@
 package com.lifesoft.chc.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lifesoft.chc.chargingcontrol.R;
+import com.lifesoft.chc.listener.FilterTypes;
 import com.lifesoft.chc.model.CCTransactions;
 import com.lifesoft.chc.view.adapter.GeneralRecyclerViewAdapter;
 import com.lifesoft.chc.view.sms.model.SmsObject;
@@ -37,6 +39,13 @@ public class AllSmsFragment extends Fragment {
         context = getContext();
         initViews();
         initAdapter();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            CCTransactions ccTransactions = (CCTransactions) getArguments().get(FilterTypes.SUCCESS_BUNDLE_KEY.getValue());
+            if (ccTransactions != null) {
+                initAdapter(ccTransactions);
+            }
+        }
         return view;
     }
 
@@ -45,6 +54,15 @@ public class AllSmsFragment extends Fragment {
     }
 
     private void initAdapter() {
+        gridLayoutManager = new GridLayoutManager(context, 1);
+        if (model != null) {
+            adapter = new GeneralRecyclerViewAdapter(context, model);
+            recyclerView.setLayoutManager(gridLayoutManager);
+            recyclerView.setAdapter(adapter);
+        }
+    }
+
+    private void initAdapter(CCTransactions model) {
         gridLayoutManager = new GridLayoutManager(context, 1);
         if (model != null) {
             adapter = new GeneralRecyclerViewAdapter(context, model);

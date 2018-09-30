@@ -30,6 +30,8 @@ import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.database.engine.DBEngine;
 import com.lifesoft.chc.listener.CCFilter;
+import com.lifesoft.chc.listener.FilterTypes;
+import com.lifesoft.chc.model.CCTransactions;
 import com.lifesoft.chc.utils.CCAnimation;
 import com.lifesoft.chc.utils.NetworkUtils;
 import com.lifesoft.chc.utils.Permissions;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // change toolbar color and title
         toolbarConfiguration(toolbar);
-        fab.setOnClickListener(view -> showCCFilterDialog());
+        fab.setOnClickListener(view -> initCCFilterDialog());
 
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -199,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-    private void showCCFilterDialog() {
+    private void initCCFilterDialog() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.alert_dialog_filter, null);
@@ -222,14 +224,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             alertDialog.dismiss();
             ccFilter = new CCFilter(this);
             progressBar.setVisibility(View.VISIBLE);
-            ccFilter.sortSuccess(smsObject.getCcTransactions(), true);
-//            if (transaction !=null){
-//                progressBar.setVisibility(View.INVISIBLE);
-//                Fragment fragment = new AllSmsFragment();
-//                Bundle bundle = new Bundle();
-//
-//                fragment.setArguments(bundle);
-//            }
+            CCTransactions transaction = ccFilter.sortSuccess(smsObject.getCcTransactions(),spinnerSuccess.getSelectedItem().toString() );
+            if (transaction != null) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Fragment fragment = new AllSmsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(FilterTypes.SUCCESS_BUNDLE_KEY.getValue(), transaction);
+                fragment.setArguments(bundle);
+                createFragment(R.id.mainContainer, fragment);
+            }
         });
     }
 

@@ -27,12 +27,14 @@ public class CCFilter implements SuccessListener {
     }
 
     @Override
-    public CCTransactions sortSuccess(CCTransactions transations, boolean isTrue) {
-        String sortValue = String.valueOf(isTrue);
+    public CCTransactions sortSuccess(CCTransactions transations, String successType) {
+        if (successType.equals(FilterTypes.SUCCESS_NONE.getValue())) {
+            return transations;
+        }
         CCTransactions.Transaction temp;
         int index = 0;
         for (int i = 0; i < transations.getTransactions().size(); i++) {
-            if (transations.getTransactions().get(i).getSuccess().equals(sortValue)) {
+            if (transations.getTransactions().get(i).getSuccess().equals(successType.toLowerCase())) {
                 temp = transations.getTransactions().get(index);
                 transations.getTransactions().set(index, transations.getTransactions().get(i));
                 transations.getTransactions().set(i, temp);
