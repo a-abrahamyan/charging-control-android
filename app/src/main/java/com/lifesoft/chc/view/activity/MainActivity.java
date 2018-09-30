@@ -29,10 +29,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.QuickContactBadge;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
@@ -47,7 +51,7 @@ import com.lifesoft.chc.view.sms.model.SmsObject;
 import com.lifesoft.chc.viewmodel.CreatedTransactionVM;
 import com.lifesoft.chc.viewmodel.PostSmsDataVM;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private static String TAG = MainActivity.class.getName();
     // Objects
     private CreatedTransactionVM createdTransactionVM;
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private Window window;
     private TextView dialogCancel;
     private TextView dialogApply;
+    Spinner spinnerSuccess;
     // Variables
 
     @Override
@@ -79,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
 
         // change toolbar color and title
         toolbarConfiguration(toolbar);
-
         fab.setOnClickListener(view -> showCCFilterDialog());
 
         toggle = new ActionBarDrawerToggle(
@@ -136,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     private void initDialogViews(View view) {
         dialogCancel = view.findViewById(R.id.cancel_dialogID);
         dialogApply = view.findViewById(R.id.apply_dialogID);
+        spinnerSuccess = (Spinner) view.findViewById(R.id.planets_spinner);
     }
 
     @Override
@@ -184,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
             if (appResponse != null) {
                 Log.i(TAG, "onChanged: Successfully");
                 smsObject.setCcTransactions(appResponse);
-                //     createFragment(R.id.mainContainer, new AllSmsFragment());
+                createFragment(R.id.mainContainer, new AllSmsFragment());
             } else {
                 Log.i(TAG, "onChanged: Successfully");
             }
@@ -211,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.setCancelable(false);
         //init views
         initDialogViews(dialogView);
+        //spinner on click
+        spinnerSuccess.setOnItemSelectedListener(this);
+        //init spinner adapter
+        initSpinnerAdapter();
         //dialog animation
         CCAnimation.dialogShowAnimation(this, dialogView, R.anim.alert_dialog_filter);
         //show dialog
@@ -218,5 +227,25 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
         //tap dialog view
         dialogCancel.setOnClickListener(v -> alertDialog.dismiss());
+    }
+
+    private void initSpinnerAdapter() {
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.planets_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSuccess.setAdapter(adapter);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String item = parent.getItemAtPosition(position).toString();
+
+        // Showing selected spinner item
+        Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

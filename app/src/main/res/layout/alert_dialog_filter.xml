@@ -7,13 +7,25 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-       <TextView
-           android:textStyle="italic"
-           android:textColor="@color/cc"
-           android:textSize="20sp"
-           android:text="@string/filter_success"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content" />
+        <LinearLayout
+            android:weightSum="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_weight="1"
+                android:textStyle="italic"
+                android:textColor="@color/cc"
+                android:textSize="20sp"
+                android:text="@string/filter_success"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <Spinner
+                android:layout_weight="1"
+                android:id="@+id/planets_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
         <TextView
             android:layout_marginTop="10dp"
             android:textStyle="italic"
