@@ -2,23 +2,12 @@ package com.lifesoft.chc.view.activity;
 
 
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,9 +20,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.QuickContactBadge;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,7 +29,7 @@ import android.widget.Toast;
 import com.lifesoft.chc.chargingcontrol.R;
 import com.lifesoft.chc.constants.AppConstants;
 import com.lifesoft.chc.database.engine.DBEngine;
-import com.lifesoft.chc.model.CCTransactions;
+import com.lifesoft.chc.listener.CCFilter;
 import com.lifesoft.chc.utils.CCAnimation;
 import com.lifesoft.chc.utils.NetworkUtils;
 import com.lifesoft.chc.utils.Permissions;
@@ -60,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private DBEngine engine;
     private Permissions permissions;
     private FragmentTransaction fragmentTransaction;
+    private CCFilter ccFilter;
     // Views
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -69,7 +58,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private Window window;
     private TextView dialogCancel;
     private TextView dialogApply;
-    Spinner spinnerSuccess;
+    private Spinner spinnerSuccess;
+    private ProgressBar progressBar;
     // Variables
 
     @Override
@@ -135,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         fab = (ImageView) findViewById(R.id.fab);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+        progressBar = findViewById(R.id.progressBarID);
     }
 
     private void initDialogViews(View view) {
@@ -227,6 +218,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         alertDialog.show();
         //tap dialog view
         dialogCancel.setOnClickListener(v -> alertDialog.dismiss());
+        dialogApply.setOnClickListener(v -> {
+            alertDialog.dismiss();
+            ccFilter = new CCFilter(this);
+            progressBar.setVisibility(View.VISIBLE);
+            ccFilter.sortSuccess(smsObject.getCcTransactions(), true);
+//            if (transaction !=null){
+//                progressBar.setVisibility(View.INVISIBLE);
+//                Fragment fragment = new AllSmsFragment();
+//                Bundle bundle = new Bundle();
+//
+//                fragment.setArguments(bundle);
+//            }
+        });
     }
 
     private void initSpinnerAdapter() {
